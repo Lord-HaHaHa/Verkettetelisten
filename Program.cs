@@ -132,7 +132,7 @@ namespace Verketetelisten
                 temp.next = start.next;
                 start.next = temp;
             }
-            if (curr.next != null)
+            if (curr.next != null || curr.next.next != null)
             {
                 while (curr.next != null || curr.next.next != null)
                 {
@@ -151,8 +151,10 @@ namespace Verketetelisten
                             curr = start;
                         }
                         else
+                            if (curr.next.next != null)
                             curr = curr.next;
-                    showList(start);
+                        else
+                            break;
 
                 }
             }
