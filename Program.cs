@@ -25,6 +25,7 @@ namespace Verketetelisten
                 Console.WriteLine("8 = Liste aus Datei Laden");
                 Console.WriteLine("9 = Bildschirm lerren");
                 Console.WriteLine("10 = Testdaten generieren");
+                Console.WriteLine("11 = Liste sort num");
                 Console.WriteLine("0 = Ende");
                 Console.WriteLine("-----------------");
                 Console.WriteLine("auswahl:");
@@ -42,6 +43,8 @@ namespace Verketetelisten
                         newElement.num = input;
                         Console.WriteLine("Bitte geben sie einen Namen für das Neue Object ein:");
                         newElement.name = Console.ReadLine();
+                        Console.WriteLine("Bitte geben sie eine Location ein:");
+                        newElement.location = Console.ReadLine();
                         break;
                     case 3:
                         Console.WriteLine("Nach welcher nummer soll das neue Element eingefügt werden");
@@ -50,11 +53,15 @@ namespace Verketetelisten
                         if (curr == null)
                             Console.WriteLine("Fehler beim erzeugen des Objectes");
                         else
+                        {
                             Console.WriteLine("Bitte geben sie eine Nummer fuer das neuangelegte Object ein:");
-                        while (!int.TryParse(Console.ReadLine(), out input)) ;
-                        curr.num = input;
-                        Console.WriteLine("Bitte geben sie einen Namen für das Neue Object ein:");
-                        curr.name = Console.ReadLine();
+                            while (!int.TryParse(Console.ReadLine(), out input)) ;
+                            curr.num = input;
+                            Console.WriteLine("Bitte geben sie einen Namen für das Neue Object ein:");
+                            curr.name = Console.ReadLine();
+                            Console.WriteLine("Bitte geben sie eine Location ein:");
+                            curr.location = Console.ReadLine();
+                        }
                         break;
                     case 4:
                         Console.WriteLine("Welcher Datensatz soll gelöscht werden(nummer)");
@@ -77,22 +84,24 @@ namespace Verketetelisten
                         Console.Clear();
                         break;
                     case 10:
-                        Pup p1 = new Pup();
-                        Pup p2 = new Pup();
-                        Pup p3 = new Pup();
-                        Pup p4 = new Pup();
-                        p1.num = 1;
-                        p2.num = 2;
-                        p3.num = 3;
-                        p4.num = 4;
-                        p1.name = "1";
-                        p2.name = "2";
-                        p3.name = "3";
-                        p4.name = "4";
-                        pup = p1;
-                        p1.next = p2;
-                        p2.next = p3;
-                        p3.next = p4;
+                        Pup oldElement = pup;
+                        for (int i = 0;  i < 10; i++)
+                        {
+                            
+                            newElement = new Pup
+                            {
+                                name = "Test Name",
+                                num = i,
+                                location = "Test Location"
+                            };
+                            oldElement.next = newElement;
+                            oldElement = newElement;
+
+
+                        }
+                        break;
+                    case 11:
+                        sortByNum(ref pup);
                         break;
                     case 0:
                         return;
@@ -107,10 +116,21 @@ namespace Verketetelisten
         {
             public int num;
             public string name;
+            public string location;
 
             public Pup next = null;
         }
 
+        static int getAmountFields(Pup start)
+        {
+            int count = 0;
+            while(start != null)
+            {
+                start = start.next;
+                count++;
+            }
+            return count;
+        }
         static void switchRef(ref Pup p0, ref Pup p1, ref Pup p2)
         {
             Pup temp = p1;
@@ -121,10 +141,108 @@ namespace Verketetelisten
             p0 = p1;
         }
 
+        static void sortByNum(ref Pup start)
+        {
+            Pup curr = start;
+            Pup temp;
+            int amount = getAmountFields(start);
+            Console.WriteLine(amount);
+
+            switch(amount)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    if (start.num < start.next.num)
+                    {
+                        temp = start;
+                        start = start.next;
+                        temp.next = start.next;
+                        start.next = temp;
+                    }
+                    break;
+                case 3:
+                    for(int i = 1; i<2;  i++)
+                    if (curr.next != null && curr.next.next != null)
+                    {
+                        while (curr.next != null && curr.next.next != null)
+                        {
+                            //Anker umhängen + Tauschen der Erstenbeiden Objekte
+                            if (start.num < start.next.num)
+                            {
+                                temp = start;
+                                start = start.next;
+                                temp.next = start.next;
+                                start.next = temp;
+                            }
+                            if (curr.next != null)
+                                if (curr.next.next != null && curr.next.num < curr.next.next.num)
+                                {
+                                    switchRef(ref curr, ref curr.next, ref curr.next.next);
+                                    curr = start;
+                                }
+                                else
+                                    if (curr.next.next != null)
+                                    curr = curr.next;
+                                else
+                                    break;
+                        }
+                        if (start.num < start.next.num)
+                        {
+                            temp = start;
+                            start = start.next;
+                            temp.next = start.next;
+                            start.next = temp;
+                        }
+                    }
+                    break;
+                default:
+                    if (curr.next != null && curr.next.next != null)
+                    {
+                        while (curr.next != null && curr.next.next != null)
+                        {
+                            //Anker umhängen + Tauschen der Erstenbeiden Objekte
+                            if (start.num < start.next.num)
+                            {
+                                temp = start;
+                                start = start.next;
+                                temp.next = start.next;
+                                start.next = temp;
+                            }
+                            if (curr.next != null)
+                                if (curr.next.next != null && curr.next.num < curr.next.next.num)
+                                {
+                                    switchRef(ref curr, ref curr.next, ref curr.next.next);
+                                    curr = start;
+                                }
+                                else
+                                    if (curr.next.next != null)
+                                    curr = curr.next;
+                                else
+                                    break;
+                        }
+                        if (start.num < start.next.num)
+                        {
+                            temp = start;
+                            start = start.next;
+                            temp.next = start.next;
+                            start.next = temp;
+                        }
+                    }
+                    break;
+
+            }
+        }
+
         static void sortByName(ref Pup start)
         {
             Pup curr = start;
             Pup temp;
+
+            Console.WriteLine(getAmountFields(start));
+
             if (start.num < start.next.num)
             {
                 temp = start;
@@ -132,9 +250,9 @@ namespace Verketetelisten
                 temp.next = start.next;
                 start.next = temp;
             }
-            if (curr.next != null || curr.next.next != null)
+            if (curr.next != null && curr.next.next != null)
             {
-                while (curr.next != null || curr.next.next != null)
+                while (curr.next != null && curr.next.next != null)
                 {
                     //Anker umhängen + Tauschen der Erstenbeiden Objekte
                     if (start.num < start.next.num)
@@ -155,7 +273,13 @@ namespace Verketetelisten
                             curr = curr.next;
                         else
                             break;
-
+                }
+                if (start.num < start.next.num)
+                {
+                    temp = start;
+                    start = start.next;
+                    temp.next = start.next;
+                    start.next = temp;
                 }
             }
 
@@ -236,7 +360,7 @@ namespace Verketetelisten
             Console.WriteLine("----");
             while (start != null)
             {
-                Console.WriteLine(start.num + " " + start.name);
+                Console.WriteLine(start.num + " " + start.name + " " + start.location);
                 start = start.next;
             }
             Console.WriteLine("----");
