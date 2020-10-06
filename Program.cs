@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Verketetelisten
                 Console.WriteLine("4 = Datensatz löschen");
                 Console.WriteLine("5 = Komplet löchen");
                 Console.WriteLine("6 = Liste sort name");
-                Console.WriteLine("7 = Liste in Datei Speichern");
+                Console.WriteLine("7 = Liste in Datei Schreiben");
                 Console.WriteLine("8 = Liste aus Datei Laden");
                 Console.WriteLine("9 = Bildschirm lerren");
                 Console.WriteLine("10 = Testdaten generieren");
@@ -75,7 +76,7 @@ namespace Verketetelisten
                         sortByName(ref pup);
                         break;
                     case 7:
-                        Console.WriteLine("Diese Funktion ist bisher nicht erstellt");
+                        saveSet(pup);
                         break;
                     case 8:
                         Console.WriteLine("Diese Funktion ist bisher nicht erstellt");
@@ -84,20 +85,13 @@ namespace Verketetelisten
                         Console.Clear();
                         break;
                     case 10:
-                        Pup oldElement = pup;
+                        newElement = null;
                         for (int i = 0;  i < 10; i++)
                         {
-                            
-                            newElement = new Pup
-                            {
-                                name = "Test Name",
-                                num = i,
-                                location = "Test Location"
-                            };
-                            oldElement.next = newElement;
-                            oldElement = newElement;
-
-
+                            newElement = addEnd(ref pup);
+                            newElement.name = "Testname";
+                            newElement.location = "Testlocation";
+                            newElement.num = i;
                         }
                         break;
                     case 11:
@@ -119,6 +113,19 @@ namespace Verketetelisten
             public string location;
 
             public Pup next = null;
+        }
+
+        static void saveSet(Pup start)
+        {
+            using(StreamWriter sw = new StreamWriter("D:\\Dokumente\\Pup_Export.txt"))
+            {
+                while(start != null)
+                {
+                    sw.WriteLine(start.num + " " + start.name + " " + start.location);
+                    start = start.next;
+                }
+                sw.Close();
+            }
         }
 
         static int getAmountFields(Pup start)
