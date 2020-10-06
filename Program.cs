@@ -79,7 +79,7 @@ namespace Verketetelisten
                         saveSet(pup);
                         break;
                     case 8:
-                        Console.WriteLine("Diese Funktion ist bisher nicht erstellt");
+                        readSet(ref pup);
                         break;
                     case 9:
                         Console.Clear();
@@ -121,10 +121,30 @@ namespace Verketetelisten
             {
                 while(start != null)
                 {
-                    sw.WriteLine(start.num + " " + start.name + " " + start.location);
+                    sw.WriteLine(start.num + ";" + start.name + ";" + start.location);
                     start = start.next;
                 }
                 sw.Close();
+            }
+        }
+
+        static void readSet(ref Pup start)
+        {
+            using(StreamReader sr = new StreamReader("D:\\Dokumente\\Pup_Export.txt"))
+            {
+                string line = "";
+                Pup newElement;
+                while((line = sr.ReadLine()) != null)
+                {
+                    string[] values = line.Split(';');
+                    if((newElement = searchByNum(start, int.Parse(values[0]))) == null)
+                    {
+                        newElement = addEnd(ref start);
+                        newElement.num = int.Parse(values[0]);
+                    }
+                    newElement.name = values[1];
+                    newElement.location = values[2];
+                }
             }
         }
 
